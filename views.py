@@ -41,7 +41,7 @@ def refresh_captcha(request):
 class RegisterView(View):
     def get(self, request):
         register_form = RegisterForm()
-        return render(request, "register.html", {'register_form': register_form, 'captcha': captcha()})
+        return render(request, "register.html", {'register_form': register_form, 'captcha': captcha})
 
     def post(self, request):
         register_form = RegisterForm(request.POST)
@@ -57,5 +57,5 @@ class RegisterView(View):
             else:
                 return render(request, 'register.html', {'msg': "验证码错误"})
         else:
-            return render(request, 'register.html', {'captcha': captcha(), 'register_form': register_form})
+            return render(request, 'register.html', {'captcha': captcha, 'register_form': register_form})
             
