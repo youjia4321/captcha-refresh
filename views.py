@@ -33,18 +33,17 @@ def jarge_captcha(captchaStr, captchaHashkey):
     else:
         return False
 
+# 前端通过ajax访问的url 然后返回一个json数据给前端
 def refresh_captcha(request):
     return HttpResponse(json.dumps(captcha()), content_type='application/json')
 
 
 class RegisterView(View):
     def get(self, request):
-        captcha = captcha()
         register_form = RegisterForm()
-        return render(request, "register.html", {'register_form': register_form, 'captcha': captcha})
+        return render(request, "register.html", {'register_form': register_form, 'captcha': captcha()})
 
     def post(self, request):
-        captcha = captcha()
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             data = register_form.cleaned_data
@@ -58,5 +57,5 @@ class RegisterView(View):
             else:
                 return render(request, 'register.html', {'msg': "验证码错误"})
         else:
-            return render(request, 'register.html', {'captcha': captcha, 'register_form': register_form})
+            return render(request, 'register.html', {'captcha': captcha(), 'register_form': register_form})
             
