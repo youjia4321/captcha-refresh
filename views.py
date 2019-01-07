@@ -39,13 +39,12 @@ def refresh_captcha(request):
 
 class RegisterView(View):
     def get(self, request):
-        hashkey = CaptchaStore.generate_key()
-        image_url = captcha_image_url(hashkey)
-        captcha = {'hashkey': hashkey, 'image_url': image_url}
+        captcha = captcha()
         register_form = RegisterForm()
         return render(request, "register.html", {'register_form': register_form, 'captcha': captcha})
 
     def post(self, request):
+        captcha = captcha()
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             data = register_form.cleaned_data
@@ -59,6 +58,5 @@ class RegisterView(View):
             else:
                 return render(request, 'register.html', {'msg': "验证码错误"})
         else:
-            email = request.POST.get("email", '')
-            return render(request, 'register.html', {'email': email, 'register_form': register_form})
+            return render(request, 'register.html', {'captcha': captcha, 'register_form': register_form})
             
